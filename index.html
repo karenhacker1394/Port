@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پورت‌های کامپیوتر</title>
+<style>
+  :root{--bg:#eef2f5;--ink:#1d2a33;--muted:#5d6b75;--card:#fff;--line:#cfd8de;--port:#27343d;--accent:#0b7285}
+  @media (prefers-color-scheme:dark){:root{--bg:#121a20;--ink:#e6edf1;--muted:#97a6b0;--card:#1b252d;--line:#2d3b45;--port:#0a0f13;--accent:#3bc0d6}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,"Vazirmatn",sans-serif;line-height:1.9}
+  header{padding:40px 20px 16px;text-align:center}
+  h1{margin:0 0 6px;font-size:2rem}
+  header p{margin:0;color:var(--muted)}
+  main{max-width:1150px;margin:0 auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .card svg{display:block;width:100%;height:130px;background:linear-gradient(#b9c4cc,#9aa7b0)}
+  .card div{padding:12px 16px 16px}
+  h2{margin:0;font-size:1.1rem;color:var(--accent)}
+  .en{direction:ltr;text-align:right;color:var(--muted);font-size:.85rem}
+  p{margin:6px 0 0;font-size:.92rem}
+  .port{fill:var(--port)}
+  .metal{fill:none;stroke:#e3e8eb;stroke-width:3}
+  .pin{fill:#d9b24a}
+  .lite{fill:#e3e8eb}
+  .usb{max-width:1150px;margin:10px auto 40px;padding:0 20px}
+  .usb h2{font-size:1.4rem;margin:0 0 6px}
+  .wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+  table{width:100%;border-collapse:collapse;min-width:560px}
+  th,td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--line);font-size:.92rem}
+  th{color:var(--accent)}
+  tr:last-child td{border-bottom:0}
+  .sw{display:inline-block;width:16px;height:16px;border-radius:4px;border:1px solid var(--line);vertical-align:middle;margin-left:8px}
+  .usb ul{padding-right:20px;margin:14px 0 0;font-size:.92rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>پورت‌های کامپیوتر</h1>
+  <p>آشنایی با درگاه‌های اتصال رایج و قدیمی و کاربرد هر کدام</p>
+</header>
+<main id="grid"></main>
+<script>
+const dots=(x,y,c,r,dx,dy,n)=>{let s='';for(let i=0;i<n;i++)s+=`<circle class="pin" cx="${x+(i%c)*dx}" cy="${y+Math.floor(i/c)*dy}" r="${r}"/>`;return s};
+const box=(body,extra='')=>`${body}${extra}`;
+const rect=(x,y,w,h,r=3)=>`<rect class="port" x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}"/><rect class="metal" x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}"/>`;
+const poly=p=>`<polygon class="port" points="${p}"/><polygon class="metal" points="${p}"/>`;
+const circ=(r)=>`<circle class="port" cx="60" cy="45" r="${r}"/><circle class="metal" cx="60" cy="45" r="${r}"/>`;
+const bar=(x,y,w,h=5)=>`<rect class="lite" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
+const usbc=(c,t)=>rect(25,28,70,30)+`<rect x="32" y="36" width="56" height="7" fill="${c}"/><text x="60" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d2a33" font-family="Tahoma">${t}</text>`;
+const ports=[
+{n:"USB نوع A",e:"USB Type-A",d:"رایج‌ترین پورت کامپیوتر است و تقریباً روی هر لپ‌تاپ و کیس پیدا می‌شود. فلش، موس، کیبورد، پرینتر و هارد اکسترنال را با آن وصل می‌کنند.",
+ s:rect(25,30,70,30)+bar(32,38,56,7)},
+{n:"USB نوع B",e:"USB Type-B",d:"پورت مربعی‌شکل که بیشتر روی خود دستگاه‌ها مثل پرینتر و اسکنر دیده می‌شود. کابل آن از یک سر USB-A و از سر دیگر Type-B دارد.",
+ s:rect(33,28,54,34)+bar(42,36,36)},
+{n:"USB نوع C",e:"USB Type-C",d:"کانکتور بیضی‌شکل و دوطرفه که جهت زدنش مهم نیست. هم شارژ می‌کند، هم داده منتقل می‌کند و در بسیاری از مدل‌ها تصویر هم می‌فرستد.",
+ s:rect(30,35,60,22,11)+bar(42,44,36,4)},
+{n:"میکرو USB",e:"Micro USB",d:"پورت کوچک و کشیده‌ای که سال‌ها روی گوشی‌های اندرویدی و پاوربانک‌ها بود. امروز بیشتر جای خود را به USB-C داده است.",
+ s:poly("30,36 90,36 90,50 82,58 38,58 30,50")+bar(40,42,40,4)},
+{n:"تاندربولت",e:"Thunderbolt 3/4",d:"از شکل USB-C استفاده می‌کند اما بسیار سریع‌تر است و تا ۴۰ گیگابیت بر ثانیه داده می‌فرستد. برای مانیتور 4K، کارت گرافیک بیرونی و SSD سریع مناسب است.",
+ s:rect(30,35,60,22,11)+`<polygon class="pin" points="64,38 54,47 60,47 56,55 68,45 61,45"/>`},
+{n:"اچ‌دی‌ام‌آی",e:"HDMI",d:"تصویر و صدای دیجیتال را با یک کابل به مانیتور، تلویزیون یا پروژکتور می‌رساند. نسخه‌های جدید آن تصویر 4K و حتی 8K را پشتیبانی می‌کنند.",
+ s:poly("25,32 95,32 95,50 88,60 32,60 25,50")+bar(36,40,48)},
+{n:"دیسپلی‌پورت",e:"DisplayPort",d:"خروجی تصویر پرسرعتی که بین گیمرها و حرفه‌ای‌ها محبوب است. نرخ نوسازی بالا و چند مانیتور روی یک کابل را به‌خوبی پشتیبانی می‌کند.",
+ s:poly("25,32 95,32 95,60 38,60 25,48")+bar(40,41,48)},
+{n:"وی‌جی‌ای",e:"VGA",d:"خروجی تصویر آنالوگ قدیمی با ۱۵ پین که معمولاً آبی‌رنگ است. هنوز در برخی پروژکتورها و مانیتورهای قدیمی دیده می‌شود.",
+ s:poly("22,32 98,32 90,60 30,60")+dots(40,40,5,2.5,10,8,15)},
+{n:"دی‌وی‌آی",e:"DVI",d:"پیش از HDMI برای اتصال مانیتور استفاده می‌شد و بسته به نوع، سیگنال دیجیتال یا آنالوگ می‌فرستد. فقط تصویر منتقل می‌کند و صدا ندارد.",
+ s:rect(18,30,84,32)+bar(26,40,4,12)+dots(40,38,7,2.2,8,8,21)},
+{n:"شبکه (اترنت)",e:"Ethernet RJ45",d:"اتصال سیمی کامپیوتر به مودم یا سوئیچ شبکه با کابل LAN. معمولاً پایدارتر و کم‌تأخیرتر از وای‌فای است و برای بازی و کار سنگین عالی است.",
+ s:`<path class="port" d="M32 28h56v32H74v-6H46v6H32z"/><path class="metal" d="M32 28h56v32H74v-6H46v6H32z"/>`+dots(40,36,8,1.8,5.7,0,8)},
+{n:"جک صدا",e:"Audio 3.5mm",d:"درگاه گرد ۳٫۵ میلی‌متری برای هدفون، بلندگو و میکروفون. روی کیس‌ها معمولاً با رنگ سبز (خروجی)، صورتی (میکروفون) و آبی (ورودی) مشخص می‌شود.",
+ s:circ(18)+`<circle class="lite" cx="60" cy="45" r="6"/>`},
+{n:"خروجی نوری صدا",e:"S/PDIF Optical",d:"صدا را به‌صورت دیجیتال و با نور از طریق کابل فیبر نوری می‌فرستد. برای اتصال به ساندبار و سیستم‌های سینمای خانگی بدون نویز الکتریکی مناسب است.",
+ s:rect(36,30,48,30)+`<rect class="lite" x="46" y="40" width="28" height="10"/>`},
+{n:"ورودی برق",e:"DC Power",d:"ورودی آداپتور برق لپ‌تاپ و برخی دستگاه‌هاست. ولتاژ و شکل سوکت هر برند فرق دارد، پس همیشه از شارژر اصلی استفاده کنید.",
+ s:circ(20)+`<circle class="lite" cx="60" cy="45" r="5"/>`},
+{n:"اسلات SD",e:"SD Card",d:"محل قرار دادن کارت حافظه دوربین و ضبط‌کننده‌ها. عکس و فیلم را بدون نیاز به کابل مستقیم روی کامپیوتر منتقل می‌کند.",
+ s:poly("28,28 85,28 92,35 92,62 28,62")+bar(36,43,48)},
+{n:"فایروایر",e:"FireWire IEEE 1394",d:"پورت قدیمی شرکت اپل برای انتقال سریع داده. در دوربین‌های فیلم‌برداری و هارد اکسترنال‌های قدیمی کاربرد داشت.",
+ s:poly("30,32 90,32 90,52 82,60 38,60 30,52")+bar(40,40,40)},
+{n:"ای‌ساتا بیرونی",e:"eSATA",d:"نسخه بیرونی پورت SATA برای وصل کردن هارد اکسترنال با سرعت بالا. بعدها USB 3 و تاندربولت جای آن را گرفتند.",
+ s:rect(30,36,60,20,2)+bar(38,43,44,4)},
+{n:"پورت سریال",e:"Serial RS-232",d:"پورت ۹ پین قدیمی برای ارتباط با مودم، دستگاه‌های صنعتی و تجهیزات شبکه. هنوز در برخی کنسول‌های مدیریتی سرور و روتر استفاده می‌شود.",
+ s:poly("22,32 98,32 90,60 30,60")+dots(40,40,5,2.5,10,10,9)},
+{n:"پورت موازی",e:"Parallel LPT",d:"درگاه بزرگ ۲۵ پین که پرینترهای قدیمی را به کامپیوتر وصل می‌کرد. داده را به‌صورت موازی می‌فرستاد و امروز تقریباً منسوخ شده است.",
+ s:poly("15,32 105,32 97,60 23,60")+dots(30,40,13,2,5.8,8,25)},
+{n:"پی‌اس/۲",e:"PS/2",d:"اتصال دایره‌ای ۶ پین برای موس (سبز) و کیبورد (بنفش) قدیمی. برخی بردهای گیمینگ هنوز یکی از آن را برای پاسخ‌دهی سریع نگه می‌دارند.",
+ s:circ(20)+dots(50,40,3,2.3,10,10,6)},
+{n:"قفل کنزینگتون",e:"Kensington Lock",d:"شکاف کوچک امنیتی که با کابل قفل به میز یا جسم ثابت وصل می‌شود. از سرقت لپ‌تاپ در محیط‌های عمومی و اداری جلوگیری می‌کند.",
+ s:rect(40,38,40,16,8)+bar(50,44,20,4)},
+{n:"USB سیاه یا سفید",e:"USB 2.0 (Hi-Speed)",d:"رنگ سیاه یا سفید معمولاً یعنی USB 2.0 با سرعت ۴۸۰ مگابیت بر ثانیه. برای موس، کیبورد و پرینتر کاملاً کافی است، اما برای کپی فایل‌های حجیم کند است. نسخه خیلی قدیمی USB 1.1 فقط ۱۲ مگابیت بر ثانیه سرعت داشت.",
+ s:usbc("#111","480 Mbps")},
+{n:"USB آبی",e:"USB 3.0 / 3.2 Gen 1",d:"آبی تنها رنگی است که در استاندارد USB 3 ذکر شده و سرعت آن ۵ گیگابیت بر ثانیه است. حدود ده برابر سریع‌تر از USB 2.0 است و برای فلش و هارد اکسترنال مناسب است.",
+ s:usbc("#1e6fd9","5 Gbps")},
+{n:"USB فیروزه‌ای (تیل)",e:"USB 3.1 / 3.2 Gen 2",d:"فیروزه‌ای روی بعضی مادربردها نشان‌دهنده USB 3.1 Gen 2 با سرعت ۱۰ گیگابیت بر ثانیه است. برای SSD اکسترنال و انتقال سریع فایل‌های بزرگ عالی است. این رنگ‌بندی استاندارد نیست و بسته به برند فرق می‌کند.",
+ s:usbc("#1fa6a0","10 Gbps")},
+{n:"USB قرمز",e:"USB 3.2 Gen 2 / پرقدرت",d:"قرمز معمولاً یک پورت USB 3.2 Gen 2 با سرعت حدود ۱۰ گیگابیت بر ثانیه است. در بعضی مادربردها هم نشانه پورت پرقدرت‌تر برای شارژ دستگاه‌هاست. دقیقش را از دفترچه مادربرد بخوانید.",
+ s:usbc("#d33","10 Gbps")},
+{n:"USB زرد یا نارنجی",e:"همیشه روشن (Always-On)",d:"زرد یا نارنجی پورت «همیشه روشن» است که حتی وقتی کامپیوتر خاموش یا در حالت خواب است، گوشی و دستگاه‌ها را شارژ می‌کند. سرعت داده‌اش بسته به مدل USB 2.0 یا 3.0 است و برای شارژ سریع طراحی شده است.",
+ s:usbc("#f0a020","Charging")},
+{n:"USB-C و USB4",e:"USB-C / USB4",d:"کانکتور USB-C بسته به مدل می‌تواند ۴۸۰ مگابیت تا ۴۰ گیگابیت بر ثانیه (USB4) و در نسخه جدید تا ۸۰ گیگابیت سرعت داشته باشد. رنگ مشخصی ندارد، پس باید آرم یا مشخصات دستگاه را بخوانید. کابل هم باید همان سرعت را پشتیبانی کند.",
+ s:rect(30,28,60,22,11)+bar(42,37,36,4)+`<text x="60" y="78" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d2a33" font-family="Tahoma">up to 40/80 Gbps</text>`}
+];
+document.getElementById('grid').innerHTML=ports.map(p=>`<article class="card"><svg viewBox="0 0 120 90" role="img" aria-label="${p.n}">${p.s}</svg><div><h2>${p.n}</h2><div class="en">${p.e}</div><p>${p.d}</p></div></article>`).join('');
+</script>
+</body>
+</html>
